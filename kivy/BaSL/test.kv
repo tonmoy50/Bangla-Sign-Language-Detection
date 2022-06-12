@@ -1,0 +1,24 @@
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+
+WindowManager:
+    transition: FadeTransition()
+    HomeWindow:
+    SecondWindow:
+
+<HomeWindow>
+    name: "home"
+    Button:
+        on_release: app.root.current = "second"
+        text: "Add Image"
+        font_size: 18
+        size_hint : .5, .5
+        pos_hint : {'center_x': .5, 'center_y': .5}
+
+<SecondWindow>
+    name: "second"
+    Button:
+        on_release: app.root.current = "home"
+        text: "OK"
+        font_size: 18
+        size_hint : .5, .5
+        pos_hint : {'center_x': .5, 'center_y': .5}
