@@ -4,7 +4,7 @@ from keras.models import Sequential
 from keras.preprocessing.image import ImageDataGenerator
 from keras.layers import Conv2D, MaxPool2D, Dense, Flatten, Dropout, BatchNormalization
 from keras.callbacks import EarlyStopping, ModelCheckpoint
-from sklearn.model_selection import train_test_split
+# from sklearn.model_selection import train_test_split
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
@@ -75,7 +75,7 @@ class Model():
 
         
 
-        model.add( Dense(10, activation="softmax") )
+        model.add( Dense(7, activation="softmax") )
 
         model.compile(optimizer="adam", loss=keras.losses.categorical_crossentropy, metrics=['accuracy'])
 
@@ -98,30 +98,32 @@ def main():
     height = 128
     width = 128
     train_obj = ImageDataGenerator()
-    train_data = train_obj.flow_from_directory(directory="augmented_train", target_size=(width, height))
+    train_data = train_obj.flow_from_directory(directory="BSL AUG", target_size=(width, height))
     test_obj = ImageDataGenerator()
-    test_data = test_obj.flow_from_directory(directory="new_test", target_size=(width,height))
+    test_data = test_obj.flow_from_directory(directory="BSL AUG Test", target_size=(width,height))
 
     #x_data, y_data = train_test_split(train_data, test_size=0.2, random_state=1)
 
     model = model_obj.get_model(height, width)
 
     #print(train_data)
-    #model.summary()
+    model.summary()
 
     #model.add( Dense(30, activation="relu") )
     #model.add( Dense(20, activation="relu") )
     #model.add( Dense(10, activation="softmax") )
 
-    check_point = ModelCheckpoint("test_model1.h5", monitor='acc', verbose=1, save_best_only=True, save_weights_only=False, mode='auto', period=1)
-    early_stop = EarlyStopping(monitor='acc', min_delta=20, verbose=1, mode='auto', patience=10)
+    check_point = ModelCheckpoint("test_model1.h5", monitor='accuracy', verbose=1, save_best_only=True, save_weights_only=False, mode='auto', period=1)
+    early_stop = EarlyStopping(monitor='accuracy', min_delta=20, verbose=1, mode='auto', patience=10)
 
     khela = model.fit_generator(steps_per_epoch=100, generator=train_data, validation_data=test_data, validation_steps=10, epochs=100 , callbacks=[check_point, early_stop])
 
+    print(khela.history)
+
     train_loss = khela.history['loss']
     test_loss = khela.history['val_loss']
-    train_acc = khela.history['acc']
-    test_acc = khela.history['val_acc']
+    train_acc = khela.history['accuracy']
+    test_acc = khela.history['val_accuracy']
     high = early_stop.stopped_epoch + 2
     epoch = range(1, high)
 

@@ -5,7 +5,7 @@ from keras.models import Sequential, Model
 from keras.preprocessing.image import ImageDataGenerator
 from keras.layers import Conv2D, MaxPool2D, Dense, Flatten, Dropout, BatchNormalization, GlobalAveragePooling2D
 from keras.callbacks import EarlyStopping, ModelCheckpoint
-from sklearn.model_selection import train_test_split
+# from sklearn.model_selection import train_test_split
 import numpy as np
 
 
@@ -32,12 +32,12 @@ def get_model(height, width):
 
 
 def main():
-    height, width = 224, 224
+    height, width = 128, 128
 
     train_obj = ImageDataGenerator()
-    train_data = train_obj.flow_from_directory(directory="train2", target_size=(width, height))
+    train_data = train_obj.flow_from_directory(directory="BSL", target_size=(width, height))
     test_obj = ImageDataGenerator()
-    test_data = test_obj.flow_from_directory(directory="validate", target_size=(width,height))
+    test_data = test_obj.flow_from_directory(directory="BSL Test", target_size=(width,height))
 
     #model = get_model(height, width)
     base_model = applications.resnet50.ResNet50(include_top=None, weights=None, input_shape=(height, width, 3) )
@@ -48,7 +48,7 @@ def main():
     model = Model(inputs = base_model.input, outputs = predictions)
     model.compile(optimizer="adam", loss=keras.losses.categorical_crossentropy, metrics=['accuracy'])
 
-    #model.summary()
+    model.summary()
 
     check_point = ModelCheckpoint("model_1.h5", monitor='val_acc', verbose=1, save_best_only=True, save_weights_only=False, mode='auto', period=1)
     early_stop = EarlyStopping(monitor='acc', min_delta=20, verbose=1, mode='auto', patience=5)

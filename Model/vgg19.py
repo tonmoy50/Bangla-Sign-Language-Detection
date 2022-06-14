@@ -4,7 +4,7 @@ from keras.models import Sequential
 from keras.preprocessing.image import ImageDataGenerator
 from keras.layers import Conv2D, MaxPool2D, Dense, Flatten, Dropout, BatchNormalization
 from keras.callbacks import EarlyStopping, ModelCheckpoint
-from sklearn.model_selection import train_test_split
+# from sklearn.model_selection import train_test_split
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
@@ -109,7 +109,7 @@ def mains():
 
     model = model_obj.get_model(height, width)
     #print(train_data)
-    #model.summary()
+    model.summary()
 
     #model.add( Dense(30, activation="relu") )
     #model.add( Dense(20, activation="relu") )
